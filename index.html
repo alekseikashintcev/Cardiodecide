@@ -910,8 +910,11 @@ const Engine = {
   // ── LIFESTYLE / RFM ──────────────────────────
   getLifestyle(pt) {
     const recs = [];
-    recs.push({f:'Снижение веса',r:'Целевой ИМТ <27 кг/м². Снижение веса на ≥10% от исходного снижает бремя ФП. Входит в обязательный план лечения.',cls:'I'});
-    if(pt.co_obesity) recs.push({f:'Ожирение — коррекция',r:'ИМТ ≥30: структурированная программа снижения веса. Снижение на ≥10% существенно уменьшает бремя ФП (LEGACY trial).',cls:'IIa'});
+    if(pt.co_obesity){
+      recs.push({f:'Снижение веса (ожирение)',r:'ИМТ ≥30: структурированная программа снижения массы тела. Снижение на ≥10% от исходного существенно уменьшает бремя ФП (LEGACY trial, AHA 2023 Class IIa). Целевой ИМТ <27 кг/м².',cls:'IIa'});
+    } else {
+      recs.push({f:'Поддержание веса',r:'Поддерживать ИМТ <27 кг/м². Избыточная масса тела — модифицируемый фактор риска прогрессирования ФП. Умеренная физическая активность.',cls:'I'});
+    }
     if(pt.c_htn||pt.h_htn) recs.push({f:'Контроль АД',r:'Целевое АД <130/80 мм рт.ст. Неконтролируемая АГ — ведущий модифицируемый фактор риска ФП и инсульта.',cls:'I'});
     if(pt.co_osa) recs.push({f:'Лечение СОАС',r:'СИПАП-терапия снижает частоту рецидивов ФП после кардиоверсии и аблации. Обязательна при верифицированном СОАС.',cls:'IIa'});
     if(pt.h_alc) recs.push({f:'Ограничение алкоголя',r:'Ограничить до <14 единиц/нед (муж) и <7 единиц/нед (жен) или полностью исключить. Алкоголь — независимый триггер ФП.',cls:'I'});
@@ -1222,6 +1225,7 @@ function printReport() {
   const content = document.getElementById('res-content');
   if(!content || content.style.display==='none') { alert('Сначала выполните анализ'); return; }
   const win = window.open('','_blank','width=800,height=900');
+  if(!win){ alert('Браузер заблокировал всплывающее окно.\nРазрешите всплывающие окна для этого сайта и повторите.'); return; }
   win.document.write(`<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
   <title>CardioDecide — Заключение</title>
   <style>
@@ -1251,7 +1255,7 @@ function printReport() {
     @media print{body{margin:10mm} .no-print{display:none}}
   </style></head><body>
   <h1>📋 CardioDecide AF — Клиническое заключение</h1>
-  <div class="header-info">Дата: ${new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})} &nbsp;|&nbsp; Алгоритмы AHA/ACC 2023 &nbsp;|&nbsp; CDSS v2.1</div>
+  <div class="header-info">Дата: ${new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})} &nbsp;|&nbsp; Алгоритмы AHA/ACC 2023 &nbsp;|&nbsp; CDSS v2.1</div>
   ${content.innerHTML}
   <div class="footer">⚠ CDSS — инструмент поддержки клинического решения врача. Все решения принимает квалифицированный специалист.</div>
   <div class="no-print" style="margin-top:20px;text-align:center">
@@ -1315,7 +1319,9 @@ function exportJSON() {
   const link = document.createElement('a');
   link.href = url;
   link.download = `cardio_${a.pt.age||'X'}${a.pt.sex||''}${Date.now()}.json`;
+  document.body.appendChild(link); // BUG4 FIX: required for Firefox/Safari
   link.click();
+  document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
 
@@ -1349,8 +1355,14 @@ function importJSON() {
   let data;
   try { data = JSON.parse(raw); } catch(e) { alert('Неверный формат JSON: ' + e.message); return; }
   const pt = data.patient || data;
-  const fields = ['age','sex','af_type','af_dur','hr','sbp','dbp','ehra','egfr','ef','wt','cr','tsh','cur_oac','cur_rhythm','prior_abl','notes'];
-  const cbFields = ['c_hf','c_htn','c_dm','c_str','c_vas','co_hfref','co_hfpef','co_cad','co_acs','co_ms','co_vhd','co_mechvalve','co_hcm','co_wpw','co_osa','co_thyroid','co_obesity','co_preg','co_cancer','co_liver','co_ckd','co_esrd','co_athlete','h_htn','h_renal','h_liver','h_stroke','h_bleed','h_inr','h_age','h_drugs','h_alc','hemo_unstable'];
+  const fields = ['age','sex','af_type','af_dur','hr','sbp','dbp','ehra','egfr','ef','wt','cr','potassium','tsh','cur_oac','cur_rhythm','notes'];
+  // BUG2+5 FIX: prior_abl is boolean in export; potassium was missing
+  const priorAblEl = document.getElementById('prior_abl');
+  if(priorAblEl && pt.prior_abl != null) priorAblEl.value = pt.prior_abl ? 'yes' : 'no';
+  const cbFields = ['c_hf','c_htn','c_dm','c_str','c_vas','co_hfref','co_hfpef','co_cad','co_acs','co_ms','co_vhd','co_mechvalve','co_hcm','co_wpw','co_osa','co_thyroid','co_obesity','co_preg','co_cancer','co_liver','co_ckd','co_esrd','co_athlete','h_htn','h_renal','h_liver','h_stroke','h_bleed','h_inr','h_age','h_drugs','h_alc'];
+  // BUG1 FIX: hemo_unstable is a <select> — restore separately
+  const hemEl = document.getElementById('hemo_unstable');
+  if(hemEl) hemEl.value = (pt.hemo_unstable === true) ? 'yes' : 'no';
   let loaded = 0;
   fields.forEach(f => {
     const el = document.getElementById(f);
