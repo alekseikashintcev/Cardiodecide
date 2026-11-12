@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CardioDecide">
 <meta name="theme-color" content="#0ea5e9">
@@ -250,7 +251,7 @@ header{
     </div>
     <div class="sec-body open">
       <div class="row2">
-        <div class="field"><label>Возраст (лет)</label><input type="number" id="age" inputmode="numeric" placeholder="65" min="18" max="110" onchange="updateScores()"></div>
+        <div class="field"><label>Возраст (лет)</label><input type="number" id="age" inputmode="numeric" placeholder="65" min="18" max="110" oninput="updateScores()" onchange="updateScores()"></div>
         <div class="field"><label>Пол</label>
           <select id="sex" onchange="updateScores()">
             <option value="">—</option>
@@ -320,7 +321,7 @@ header{
         <label class="cb-item" onclick="tog(event,this,'c_str');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="c_str">Инсульт/ТИА (+2)</label>
         <label class="cb-item" onclick="tog(event,this,'c_vas');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="c_vas">Болезни сосудов (+1)</label>
       </div>
-      <p style="font-size:10px;color:var(--tx3);margin-top:6px;font-family:var(--mn)">Возраст и пол учитываются автоматически</p>
+      <p style="font-size:10px;color:var(--tx3);margin-top:6px;font-family:var(--mn)">Возраст, пол, ХСН (из «Сопутствующих») и ФВ ≤40% учитываются автоматически</p>
     </div>
   </div>
 
@@ -332,11 +333,11 @@ header{
     </div>
     <div class="sec-body">
       <div class="cb-grid">
-        <label class="cb-item" onclick="tog(event,this,'co_hfref')"><div class="cb-box">✓</div><input type="checkbox" id="co_hfref">ХСН сниж. ФВ (HFrEF)</label>
-        <label class="cb-item" onclick="tog(event,this,'co_hfpef')"><div class="cb-box">✓</div><input type="checkbox" id="co_hfpef">ХСН сохр. ФВ (HFpEF)</label>
+        <label class="cb-item" onclick="tog(event,this,'co_hfref');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="co_hfref">ХСН сниж. ФВ (HFrEF)</label>
+        <label class="cb-item" onclick="tog(event,this,'co_hfpef');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="co_hfpef">ХСН сохр. ФВ (HFpEF)</label>
         <label class="cb-item" onclick="tog(event,this,'co_cad')"><div class="cb-box">✓</div><input type="checkbox" id="co_cad">ИБС / стенокардия</label>
         <label class="cb-item" onclick="tog(event,this,'co_acs')"><div class="cb-box">✓</div><input type="checkbox" id="co_acs">ОКС / ЧКВ ≤12 мес</label>
-        <label class="cb-item" onclick="tog(event,this,'co_ms')"><div class="cb-box">✓</div><input type="checkbox" id="co_ms">Митральный стеноз</label>
+        <label class="cb-item" onclick="tog(event,this,'co_ms')"><div class="cb-box">✓</div><input type="checkbox" id="co_ms">Митр. стеноз (ревматич., умер./тяжёлый)</label>
         <label class="cb-item" onclick="tog(event,this,'co_vhd')"><div class="cb-box">✓</div><input type="checkbox" id="co_vhd">Клапанная патология</label>
         <label class="cb-item" onclick="tog(event,this,'co_mechvalve')"><div class="cb-box">✓</div><input type="checkbox" id="co_mechvalve">Мех. протез клапана</label>
         <label class="cb-item" onclick="tog(event,this,'co_hcm')"><div class="cb-box">✓</div><input type="checkbox" id="co_hcm">ГКМП</label>
@@ -368,10 +369,11 @@ header{
         <label class="cb-item" onclick="tog(event,this,'h_stroke');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_stroke">Инсульт (+1)</label>
         <label class="cb-item" onclick="tog(event,this,'h_bleed');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_bleed">Кровотечение (+1)</label>
         <label class="cb-item" onclick="tog(event,this,'h_inr');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_inr">Лабильный МНО (+1)</label>
-        <label class="cb-item" onclick="tog(event,this,'h_age');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_age">Возраст ≥65 (+1)</label>
+        <label class="cb-item" onclick="tog(event,this,'h_age');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_age">Возраст >65 (+1)</label>
         <label class="cb-item" onclick="tog(event,this,'h_drugs');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_drugs">Антиагр./НПВС (+1)</label>
         <label class="cb-item" onclick="tog(event,this,'h_alc');updateScores()"><div class="cb-box">✓</div><input type="checkbox" id="h_alc">Алкоголь ≥8д/нед (+1)</label>
       </div>
+      <p style="font-size:10px;color:var(--tx3);margin-top:6px;font-family:var(--mn)">Возраст &gt;65 отмечается автоматически по полю «Возраст»</p>
     </div>
   </div>
 
@@ -384,7 +386,7 @@ header{
     <div class="sec-body">
       <div class="row2">
         <div class="field"><label>СКФ (мл/мин/1.73м²)</label><input type="number" id="egfr" inputmode="decimal" placeholder="60"></div>
-        <div class="field"><label>ФВ ЛЖ (%)</label><input type="number" id="ef" inputmode="decimal" placeholder="55"></div>
+        <div class="field"><label>ФВ ЛЖ (%)</label><input type="number" id="ef" inputmode="decimal" placeholder="55" oninput="updateScores()"></div>
       </div>
       <div class="row2">
         <div class="field"><label>Масса тела (кг)</label><input type="number" id="wt" inputmode="decimal" placeholder="80"></div>
@@ -516,7 +518,7 @@ header{
     </div>
     <div class="about-section">
       <h3>🏷 Версия</h3>
-      <p>CardioDecide AF v2.0 · Алгоритмы AHA 2023 · Офлайн PWA</p>
+      <p>CardioDecide AF v2.2 · Алгоритмы AHA 2023 · Офлайн PWA</p>
     </div>
   </div>
 </div>
@@ -533,10 +535,25 @@ const Engine = {
   // ── Utility helpers ──────────────────────────
   g(id) { const e=document.getElementById(id); if(!e) return null; if(e.type==='checkbox') return e.checked; if(e.type==='number') return e.value?parseFloat(e.value):null; return e.value||null; },
 
+  // HFrEF = HFrEF ticked, or LVEF ≤40 % (ACC/AHA and ESC definition)
+  isHFrEF(pt) { return !!(pt.co_hfref || (pt.ef!=null && pt.ef<=40)); },
+
+  // keep the HAS-BLED "age >65" box in step with the age field
+  syncAutoFactors() {
+    const age=this.g('age'); if(age===null) return;
+    const cb=document.getElementById('h_age'); if(!cb) return;
+    const want=age>65;
+    if(cb.checked!==want){
+      cb.checked=want;
+      const lab=cb.closest&&cb.closest('.cb-item'); if(lab) lab.classList.toggle('on',want);
+    }
+  },
+
   calcCHADS() {
     let s=0;
-    const age=this.g('age')||0, sex=this.g('sex');
-    if(this.g('c_hf')) s+=1;
+    const age=this.g('age')||0, sex=this.g('sex'), ef=this.g('ef');
+    // C: clinical HF (ticked here or under "Comorbidities") or LVEF ≤40 %
+    if(this.g('c_hf')||this.g('co_hfref')||this.g('co_hfpef')||(ef!==null&&ef<=40)) s+=1;
     if(this.g('c_htn')) s+=1;
     if(age>=75) s+=2; else if(age>=65) s+=1;
     if(this.g('c_dm')) s+=1;
@@ -554,6 +571,7 @@ const Engine = {
 
   // ── Data collection ──────────────────────────
   collect() {
+    this.syncAutoFactors();
     return {
       age: this.g('age'), sex: this.g('sex'),
       af_type: this.g('af_type'), af_dur: this.g('af_dur'),
@@ -561,7 +579,7 @@ const Engine = {
       hemo_unstable: this.g('hemo_unstable')==='yes',
       ehra: this.g('ehra'),
       egfr: this.g('egfr'), ef: this.g('ef'),
-      wt: this.g('wt'), cr: this.g('cr'), tsh: this.g('tsh'),
+      wt: this.g('wt'), cr: this.g('cr'), potassium: this.g('potassium'), tsh: this.g('tsh'),
       cur_oac: this.g('cur_oac'), cur_rhythm: this.g('cur_rhythm'),
       prior_abl: this.g('prior_abl')==='yes',
       notes: this.g('notes'),
@@ -636,15 +654,30 @@ const Engine = {
   getAnticoagulation(pt) {
     const { age, wt, cr, egfr, chads, hasbled, sex } = pt;
 
+    // Indication by CHA2DS2-VASc — evaluated first so that special populations (pregnancy) cannot bypass it
+    const maleThresh = sex==='male' ? 2 : 3;
+    const consider   = sex==='male' ? 1 : 2;
+    const indicated  = chads >= maleThresh;
+    const consider_  = chads >= consider && !indicated;
+
+    const valvular = !!(pt.co_mechvalve || pt.co_ms);   // OAC is indicated irrespective of the score
+    if(!valvular && !indicated && !consider_) {
+      return {
+        indicated: false, agent: 'Не показан', dose: '—', cls: 'III', loe: 'B-NR',
+        rationale: `CHA₂DS₂-VASc ${chads} у ${sex==='male'?'мужчины':'женщины'}: риск инсульта низкий. Антикоагуляция не рекомендована (Class III, LOE B-NR). Следует повторно оценивать при появлении новых факторов риска.`,
+        warnings: pt.co_preg ? ['Беременность: при появлении показаний к антикоагуляции ДОАК противопоказаны — использовать НМГ под контролем акушера и гематолога'] : [], alternatives: []
+      };
+    }
+
     // Absolute contraindication contexts
     if(pt.co_preg) {
       return {
         indicated: true,
         agent: 'НМГ (гепарин низкомолекулярный)',
         dose: 'По весу (эноксапарин 1 мг/кг п/к 2р/д)',
-        cls: 'I', loe: 'C-EO',
+        cls: (valvular||indicated)?'I':'IIa', loe: 'C-EO',
         rationale: 'Беременность: ДОАК абсолютно противопоказаны (тератогенность). НМГ — препарат выбора в 1–3 триместрах. Варфарин допустим только во 2-м триместре строго под контролем.',
-        warnings: ['⚠ ДОАК ПРОТИВОПОКАЗАНЫ при беременности','Варфарин — тератоген в I триместре, допустим во II–III под контролем МНО 2–3','Обязательна консультация акушера и гематолога'],
+        warnings: ['⚠ ДОАК ПРОТИВОПОКАЗАНЫ при беременности','Варфарин — тератоген в I триместре, допустим во II–III под контролем МНО 2–3','Обязательна консультация акушера и гематолога',...(pt.co_mechvalve?['⚠ Механический клапан при беременности — очень высокий риск: схема (НМГ/варфарин по триместрам, контроль анти-Ха/МНО) определяется совместно кардиологом, акушером и гематологом']:[])],
         alternatives: []
       };
     }
@@ -653,9 +686,9 @@ const Engine = {
     if(pt.co_mechvalve) {
       return {
         indicated: true,
-        agent: 'Варфарин', dose: 'МНО 2.5–3.5 (митральный) / 2.0–3.0 (аортальный)',
+        agent: 'Варфарин', dose: 'МНО 3.0 (диапазон 2.5–3.5)',
         cls: 'I', loe: 'B-NR',
-        rationale: 'Механический протез клапана сердца: ДОАК абсолютно противопоказаны. Варфарин — единственный рекомендованный антикоагулянт (Class I, LOE B-NR). Целевой МНО зависит от позиции протеза.',
+        rationale: 'Механический протез клапана сердца: ДОАК абсолютно противопоказаны. Варфарин — единственный рекомендованный антикоагулянт (Class I, LOE B-NR). При ФП (дополнительный фактор тромбоэмболического риска) целевое МНО 3.0 (2.5–3.5) независимо от позиции протеза (ACC/AHA 2020 по клапанным порокам; ESC/EACTS).',
         warnings: ['⚠ ДОАК ПРОТИВОПОКАЗАНЫ при механическом протезе клапана (повышен риск тромбоэмболии)'],
         alternatives: []
       };
@@ -673,30 +706,16 @@ const Engine = {
       };
     }
 
-    // Check indication by CHA2DS2-VASc
-    const maleThresh = sex==='male' ? 2 : 3;
-    const consider   = sex==='male' ? 1 : 2;
-    const indicated  = chads >= maleThresh;
-    const consider_  = chads >= consider && !indicated;
-
-    if(!indicated && !consider_) {
-      return {
-        indicated: false, agent: 'Не показан', dose: '—', cls: 'III', loe: 'B-NR',
-        rationale: `CHA₂DS₂-VASc ${chads} у ${sex==='male'?'мужчины':'женщины'}: риск инсульта низкий. Антикоагуляция не рекомендована (Class III, LOE B-NR). Следует повторно оценивать при появлении новых факторов риска.`,
-        warnings: [], alternatives: []
-      };
-    }
-
     // Determine DOAC agent
     // ESRD/dialysis
     if(pt.co_esrd || (egfr&&egfr<15)) {
       let dose = '5 мг 2р/д';
-      if(age>=80 || wt<=60 || (cr&&cr>=1.5)) dose = '2.5 мг 2р/д';
+      if((age!=null && age>=80) || (wt!=null && wt<=60)) dose = '2.5 мг 2р/д';   // dialysis rule (FDA label): age ≥80 OR weight ≤60 kg
       return {
         indicated: true, agent: 'Апиксабан', dose,
         cls: 'IIb', loe: 'B-NR',
-        rationale: 'ХБП 5 стадии / диализ: большинство ДОАК противопоказаны или не изучены. Апиксабан не выводится почками и наиболее изучен при ТХПН. Доза корригируется по критериям (возраст ≥80, масса ≤60 кг, Cr ≥1.5 мг/дл — 2 из 3 → снизить дозу).',
-        warnings: ['⚠ Ривароксабан, эдоксабан при СКФ <15 — нет данных или противопоказаны','Дабигатран при СКФ <30 — противопоказан'],
+        rationale: 'ХБП 5 стадии / диализ: большинство ДОАК противопоказаны или не изучены. Апиксабан не выводится почками и наиболее изучен при ТХПН. Доза (инструкция FDA для диализа): 5 мг 2р/д; 2.5 мг 2р/д при возрасте ≥80 лет ИЛИ массе ≤60 кг (креатинин при диализе не учитывается).' + (wt==null?' ⚠ Масса тела не указана — укажите её для выбора дозы.':''),
+        warnings: ['⚠ Ривароксабан, эдоксабан при СКФ <15 — нет данных или противопоказаны','Дабигатран при СКФ <30 — противопоказан','В ЕС (SmPC) апиксабан при КК <15 мл/мин и на диализе «не рекомендуется», в США (FDA) допускается — сверьтесь с инструкцией, действующей в вашей стране.'],
         alternatives: ['Варфарин (МНО 2–3) — альтернатива при недоступности апиксабана']
       };
     }
@@ -720,7 +739,11 @@ const Engine = {
     const alternatives=[];
 
     // Dose reduction for apixaban: 2 of 3 criteria
-    const apixReduced = (age&&age>=80?1:0)+(wt&&wt<=60?1:0)+(cr&&cr>=1.5?1:0) >= 2;
+    const metCrit = (age&&age>=80?1:0)+(wt&&wt<=60?1:0)+(cr&&cr>=1.5?1:0);
+    const apixReduced = metCrit >= 2;
+    const unknownCrit = [wt==null?'масса тела':null, cr==null?'креатинин':null].filter(Boolean);
+    if(!apixReduced && unknownCrit.length && metCrit+unknownCrit.length >= 2)
+      warnings.push(`Не указаны: ${unknownCrit.join(', ')} — критерии снижения дозы апиксабана (≥2 из 3) оценены неполностью.`);
     if(apixReduced) dose='2.5 мг 2р/д';
 
     rationale = `Апиксабан — препарат выбора при ФП в большинстве клинических ситуаций: наилучший профиль безопасности (ARISTOTLE), минимальный риск ЖКТ-кровотечений среди ДОАК.`;
@@ -740,7 +763,7 @@ const Engine = {
     if(pt.co_cancer) {
       warnings.push('При онкологии апиксабан предпочтительнее ривароксабана (меньший риск ЖКТ-кровотечений)');
     }
-    if(pt.co_acs || pt.co_cad) {
+    if(pt.co_acs) {
       warnings.push('ОКС/ЧКВ + ФП: тройная терапия (ДОАК + 2 антиагреганта) максимум 1 нед → двойная (ДОАК + клопидогрел) → через 12 мес ДОАК монотерапия');
     }
     if(hasbled>=3) {
@@ -760,17 +783,17 @@ const Engine = {
   // ── RATE CONTROL ─────────────────────────────
   getRateControl(pt) {
     const { ef, co_hfref, co_wpw, hemo_unstable, hr } = pt;
-    const hfref = co_hfref || (ef && ef<40);
+    const hfref = this.isHFrEF(pt);
 
     // WPW — CRITICAL
     if(co_wpw) {
       return {
-        target: 'Экстренная кардиоверсия или прокаинамид',
-        first_line: 'Процаинамид 1000 мг в/в или экстренная ЭКВ',
+        target: hemo_unstable ? 'Немедленная электрическая кардиоверсия' : 'Экстренная кардиоверсия или прокаинамид',
+        first_line: hemo_unstable ? 'Синхронизированная ЭКВ (бифазная, 200 Дж) под седацией — без промедления' : 'Процаинамид 1000 мг в/в или экстренная ЭКВ',
         cls:'I', loe:'B-NR',
         rationale:'WPW/синдром предвозбуждения + ФП: бета-блокаторы, дигоксин, верапамил, дилтиазем АБСОЛЮТНО ПРОТИВОПОКАЗАНЫ — могут вызвать фибрилляцию желудочков через ускорение проведения по ДПП. Тактика — экстренная электрическая кардиоверсия или прокаинамид.',
         contraindications:['⚠ АБСОЛЮТНО ПРОТИВОПОКАЗАНЫ: бета-блокаторы, дигоксин, верапамил, дилтиазем, аденозин!'],
-        alternatives:['Ибутилид 1 мг в/в при стабильной гемодинамике','Экстренная ЭКВ при нестабильности']
+        alternatives: hemo_unstable ? [] : ['Ибутилид 1 мг в/в при стабильной гемодинамике','Экстренная ЭКВ при нестабильности']
       };
     }
 
@@ -792,7 +815,7 @@ const Engine = {
         target: '≤110 уд/мин в покое',
         first_line: 'Бисопролол 2.5–10 мг/сут или карведилол 3.125–25 мг 2р/д',
         cls:'I', loe:'B-R',
-        rationale:'HFrEF (ФВ <40%): бета-блокаторы — препараты выбора. Недигидропиридиновые БКК (верапамил, дилтиазем) противопоказаны при HFrEF. Дигоксин — дополнение при недостаточном контроле ЧЖС или непереносимости бета-блокаторов. Целевая ЧЖС ≤110 уд/мин (либеральный контроль).',
+        rationale:'HFrEF (ФВ ≤40%): бета-блокаторы — препараты выбора. Недигидропиридиновые БКК (верапамил, дилтиазем) противопоказаны при HFrEF. Дигоксин — дополнение при недостаточном контроле ЧЖС или непереносимости бета-блокаторов. Целевая ЧЖС ≤110 уд/мин (либеральный контроль).',
         contraindications:['Недигидропиридиновые БКК при HFrEF — риск декомпенсации'],
         alternatives:['Дигоксин 0.125–0.25 мг/сут (целевой уровень 0.5–0.9 нг/мл) — добавить при недостаточном контроле','Амиодарон в/в при острой декомпенсации ХСН']
       };
@@ -815,9 +838,22 @@ const Engine = {
   // ── RHYTHM CONTROL ───────────────────────────
   getRhythmControl(pt) {
     const { af_type, af_dur, ef, ehra, co_hfref, co_hfpef, co_cad, co_hcm, co_wpw, co_ms, hemo_unstable, prior_abl, chads } = pt;
-    const hfref = co_hfref || (ef&&ef<40);
+    const hfref = this.isHFrEF(pt);
     const symptomatic = ['2a','2b','3','4'].includes(ehra);
     const permanent = af_type==='permanent';
+
+    if(permanent && hemo_unstable) {
+      // permanent AF but haemodynamically unstable → emergency cardioversion still applies
+      return {
+        indicated: true,
+        strategy: 'Экстренная электрическая кардиоверсия (нестабильная гемодинамика, несмотря на постоянную ФП)',
+        cls:'I', loe:'B-NR',
+        cardioversion:{type:'electrical', anticoag:'Немедленно — без промедления (экстренная ситуация). После кардиоверсии — антикоагуляция ≥4 нед.', tee:false, drug:''},
+        aad:{agent:'', dose:'', rationale:''},
+        ablation:{indicated:false, cls:'', rationale:''},
+        pip:''
+      };
+    }
 
     if(permanent) {
       return {
@@ -851,7 +887,7 @@ const Engine = {
     let aadAgent='', aadDose='', aadRationale='';
     if(hfref) {
       aadAgent='Амиодарон'; aadDose='200 мг 3р/д × 1 нед → 200 мг 2р/д × 1 нед → 200 мг/сут';
-      aadRationale='HFrEF (ФВ <40%): ЕДИНСТВЕННЫЙ безопасный ААП — амиодарон. Флекаинид, пропафенон, дронедарон, соталол — ПРОТИВОПОКАЗАНЫ (проаритмия, ухудшение ХСН).';
+      aadRationale='HFrEF (ФВ ≤40%): ЕДИНСТВЕННЫЙ безопасный ААП — амиодарон. Флекаинид, пропафенон, дронедарон, соталол — ПРОТИВОПОКАЗАНЫ (проаритмия, ухудшение ХСН).';
     } else if(co_hfpef) {
       aadAgent='Дронедарон или Амиодарон';
       aadDose='Дронедарон 400 мг 2р/д с едой / Амиодарон 200 мг/сут';
@@ -862,6 +898,10 @@ const Engine = {
     } else if(co_cad) {
       aadAgent='Соталол или Дронедарон'; aadDose='Соталол 80–160 мг 2р/д / Дронедарон 400 мг 2р/д';
       aadRationale='ИБС без ХСН: соталол или дронедарон — первая линия. Флекаинид/пропафенон — ПРОТИВОПОКАЗАНЫ при ИБС. Амиодарон — при неэффективности альтернатив.';
+    } else if(pt.co_vhd || co_ms) {
+      aadAgent='Дронедарон или Амиодарон';
+      aadDose='Дронедарон 400 мг 2р/д с едой / Амиодарон 200 мг/сут';
+      aadRationale='Клапанная патология — структурное заболевание сердца: флекаинид и пропафенон избегать до оценки значимости порока. Дронедарон или амиодарон — варианты выбора; решение по данным ЭхоКГ.';
     } else {
       aadAgent='Флекаинид, Пропафенон или Дронедарон';
       aadDose='Флекаинид 50–150 мг 2р/д / Пропафенон 150–300 мг 3р/д / Дронедарон 400 мг 2р/д';
@@ -892,14 +932,14 @@ const Engine = {
 
     // Pill-in-pocket
     let pip='';
-    if(!hfref && !co_cad && !co_hcm && (af_type==='paroxysmal') && ehra && ['2a','2b'].includes(ehra)) {
+    if(!hfref && !co_cad && !co_hcm && !co_hfpef && !co_wpw && !co_ms && !pt.co_vhd && !hemo_unstable && (af_type==='paroxysmal') && ehra && ['2a','2b'].includes(ehra)) {
       pip='«Таблетка в кармане» (pill-in-pocket): флекаинид 200–300 мг или пропафенон 450–600 мг однократно при пароксизме — допустима у тщательно отобранных пациентов без структурной патологии (предварительно тестируется в стационаре).';
     }
 
     return {
       indicated: !permanent,
       strategy,
-      cls: symptomatic?'I':'IIa', loe:'B-R',
+      cls: (symptomatic||hemo_unstable)?'I':'IIa', loe:'B-R',
       cardioversion:{type:cvType, anticoag:cvAnticoag, tee:cvTee, drug:cvDrug},
       aad:{agent:aadAgent, dose:aadDose, rationale:aadRationale},
       ablation:{indicated:ablIndicated, cls:ablCls, rationale:ablRationale},
@@ -949,14 +989,18 @@ const Engine = {
 
   // ── REASONING ────────────────────────────────
   buildReasoning(pt, ac, rc, rh) {
-    let r = `Пациент ${pt.age||'?'} лет (${pt.sex==='male'?'м':'ж'}), CHA₂DS₂-VASc ${pt.chads}, HAS-BLED ${pt.hasbled}. `;
-    r += ac.indicated ?
-      `Антикоагуляция показана: выбран ${ac.agent} ${ac.dose}. ` :
-      'Антикоагуляция не показана при данном балле CHA₂DS₂-VASc. ';
+    const sexTxt = pt.sex==='male' ? 'м' : pt.sex==='female' ? 'ж' : 'пол не указан';
+    let r = `Пациент ${pt.age||'?'} лет (${sexTxt}), CHA₂DS₂-VASc ${pt.chads}, HAS-BLED ${pt.hasbled}. `;
+    if(!ac.indicated) r += 'Антикоагуляция не показана при данном балле CHA₂DS₂-VASc. ';
+    else if(ac.cls==='IIa') r += `Антикоагуляцию целесообразно рассмотреть (Кл. IIa); предлагается ${ac.agent} ${ac.dose}. `;
+    else r += `Антикоагуляция показана: выбран ${ac.agent} ${ac.dose}. `;
     r += `Контроль ЧЖС: ${rc.first_line}. `;
-    if(rh.indicated) r += `Стратегия ритм-контроля показана${['2a','2b','3','4'].includes(pt.ehra)?' (симптомная ФП)':''}. `;
-    r += rh.aad.agent ? `ААП: ${rh.aad.agent}. ` : '';
-    if(rh.ablation.indicated) r += `Катетерная аблация: ${rh.ablation.cls} — ${rh.ablation.rationale.substring(0,80)}...`;
+    if(rh.strategy) r += `Стратегия: ${rh.strategy}. `;
+    if(rh.indicated && rh.aad.agent && rh.aad.agent!=='—') r += `ААП: ${rh.aad.agent}. `;
+    if(rh.ablation.indicated) {
+      const first = (rh.ablation.rationale.split('. ')[0]||'').replace(/\.$/,'');
+      r += `Катетерная аблация (Кл. ${rh.ablation.cls}): ${first}.`;
+    }
     return r;
   },
 
@@ -993,8 +1037,8 @@ function tog(e,label,id) {
 }
 
 function updateScores() {
+  Engine.syncAutoFactors();
   const chads=Engine.calcCHADS(), hb=Engine.calcHASBLED();
-  const age=parseFloat(document.getElementById('age').value)||0;
   const ehra=document.getElementById('ehra').value;
 
   const sv=document.getElementById('s-chads');
@@ -1024,10 +1068,33 @@ function recCls(cls){const m={'I':'c1','IIa':'c2a','IIb':'c2b','III':'c3'};retur
 //  RENDER
 // ══════════════════════════════════════════════
 
+function validateInputs() {
+  const rules = [
+    ['age','Возраст',18,110,'лет'], ['hr','ЧЖС',20,300,'уд/мин'],
+    ['sbp','АД систол.',40,300,'мм рт.ст.'], ['dbp','АД диастол.',20,200,'мм рт.ст.'],
+    ['egfr','СКФ',1,200,'мл/мин/1.73м²'], ['ef','ФВ ЛЖ',5,85,'%'],
+    ['wt','Масса тела',20,350,'кг'], ['cr','Креатинин',0.2,20,'мг/дл'],
+    ['potassium','Калий',1.5,9,'ммоль/л'], ['tsh','ТТГ',0,150,'мЕД/л']
+  ];
+  const bad = [];
+  rules.forEach(([id,name,lo,hi,unit]) => {
+    const v = Engine.g(id);
+    if(v === null) return;
+    if(v < lo || v > hi) {
+      let msg = `• ${name}: ${v} — вне допустимого диапазона (${lo}–${hi} ${unit})`;
+      if(id === 'cr' && v > hi) msg += '. Похоже, значение в мкмоль/л — введите в мг/дл (мкмоль/л ÷ 88.4)';
+      bad.push(msg);
+    }
+  });
+  if(bad.length) { alert('Проверьте введённые значения:\n' + bad.join('\n')); return false; }
+  return true;
+}
+
 function runAnalysis() {
   if(!Engine.g('af_type')||!Engine.g('age')||!Engine.g('sex')){
     alert('Укажите возраст, пол и тип ФП');return;
   }
+  if(!validateInputs()) return;
   const {pt,diag,ac,rc,rh,lf,fu,cw,reasoning}=Engine.analyze();
 
   const urgencyClass={'emergency':'ub-emergency','urgent':'ub-urgent','routine':'ub-routine'}[diag.urgency];
@@ -1075,7 +1142,7 @@ function runAnalysis() {
           <div class="risk-big" style="color:${chadsColor}">${pt.chads}<span style="font-size:13px;color:var(--tx3)">/9</span></div>
           <div class="risk-bar"><div class="risk-fill" style="width:${chadsBarW}%;background:${chadsColor}"></div></div>
           <div class="sc-risk" style="color:${chadsColor};font-family:var(--mn);font-size:10px">${strokePct} / год</div>
-          <div class="risk-desc">${pt.chads<=1?'Антикоагуляция не рекомендована':pt.chads===2?'Рассмотреть антикоагуляцию':'Антикоагуляция показана'}</div>
+          <div class="risk-desc">${!ac.indicated?'Антикоагуляция не рекомендована':ac.cls==='IIa'?'Рассмотреть антикоагуляцию':'Антикоагуляция показана'}</div>
         </div>
         <div class="risk-blk">
           <div class="risk-lbl">РИСК КРОВОТЕЧЕНИЯ</div>
@@ -1201,6 +1268,7 @@ function runAnalysis() {
   cont.innerHTML=html;
   document.getElementById('res-action-bar').style.display='flex';
   showView('results');
+  document.getElementById('view-results').scrollTop=0;
   // Store last result for export
   window._lastAnalysis = {pt, diag, ac, rc, rh, lf, fu, cw, reasoning};
 }
@@ -1249,13 +1317,16 @@ function printReport() {
     .ub-urgent{background:#fef3c7;border:1px solid #f59e0b;color:#92400e}
     .ub-routine{background:#d1fae5;border:1px solid #10b981;color:#065f46}
     .reasoning-body{font-size:12px;line-height:1.7;padding:10px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px}
+    .risk-bar{height:4px;background:#e5e7eb;border-radius:2px;margin:6px 0;overflow:hidden}
+    .risk-fill{height:100%;border-radius:2px}
+    .tag{display:inline-block;border:1px solid #d1d5db;border-radius:10px;padding:1px 7px;font-size:10px;margin:0 4px 4px 0}
     .cls-badge{font-size:10px;padding:1px 4px;border-radius:3px;background:#dbeafe;color:#1d4ed8}
     .gl-ref{font-size:10px;color:#6b7280;padding:8px;background:#f9fafb;border-radius:4px}
     .footer{margin-top:20px;padding-top:12px;border-top:1px solid #d1d5db;font-size:10px;color:#9ca3af;text-align:center}
     @media print{body{margin:10mm} .no-print{display:none}}
   </style></head><body>
   <h1>📋 CardioDecide AF — Клиническое заключение</h1>
-  <div class="header-info">Дата: ${new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})} &nbsp;|&nbsp; Алгоритмы AHA/ACC 2023 &nbsp;|&nbsp; CDSS v2.1</div>
+  <div class="header-info">Дата: ${new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})} &nbsp;|&nbsp; Алгоритмы AHA/ACC 2023 &nbsp;|&nbsp; CDSS v2.2</div>
   ${content.innerHTML}
   <div class="footer">⚠ CDSS — инструмент поддержки клинического решения врача. Все решения принимает квалифицированный специалист.</div>
   <div class="no-print" style="margin-top:20px;text-align:center">
@@ -1276,17 +1347,19 @@ function printReport() {
 function buildTextReport() {
   const a = window._lastAnalysis;
   if(!a) return '';
-  const {pt, diag, ac, rc, rh, lf, fu} = a;
+  const {pt, diag, ac, rc, rh, lf, fu, cw} = a;
   const lines = [
     '=== CardioDecide AF — Заключение ===',
     `Дата: ${new Date().toLocaleDateString('ru-RU')}`,
     '',
+    ...((cw && cw.length) ? ['КРИТИЧЕСКИЕ ПРЕДУПРЕЖДЕНИЯ:', ...cw.map(w=>`  ${w}`), ''] : []),
     `ДИАГНОЗ: ${diag.primary} (МКБ-10: ${diag.icd10})`,
     `Пациент: ${pt.age||'?'} лет, ${pt.sex==='male'?'мужчина':'женщина'}`,
     `CHA₂DS₂-VASc: ${pt.chads}  |  HAS-BLED: ${pt.hasbled}`,
     '',
     `АНТИКОАГУЛЯЦИЯ: ${ac.agent} — ${ac.dose}`,
     `Обоснование: ${ac.rationale}`,
+    ...(ac.warnings||[]).map(w=>`  ${w}`),
     '',
     `КОНТРОЛЬ ЧЖС: ${rc.first_line}`,
     `Цель: ${rc.target}`,
@@ -1304,14 +1377,15 @@ function exportJSON() {
   const a = window._lastAnalysis;
   if(!a) { alert('Сначала выполните анализ'); return; }
   const exportData = {
-    version: '2.1',
+    version: '2.2',
     exported: new Date().toISOString(),
     patient: a.pt,
     diagnosis: a.diag,
     anticoagulation: a.ac,
     rateControl: a.rc,
     rhythmControl: a.rh,
-    followup: a.fu
+    followup: a.fu,
+    criticalWarnings: a.cw
   };
   const jsonStr = JSON.stringify(exportData, null, 2);
   const blob = new Blob([jsonStr], {type:'application/json'});
@@ -1322,7 +1396,7 @@ function exportJSON() {
   document.body.appendChild(link); // BUG4 FIX: required for Firefox/Safari
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);   // immediate revoke can cancel the download in Safari/Firefox
 }
 
 async function copyReport() {
@@ -1337,8 +1411,9 @@ async function copyReport() {
       ta.style.position='fixed';ta.style.opacity='0';
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand('copy');
+      const ok = document.execCommand('copy');
       document.body.removeChild(ta);
+      if(!ok) throw new Error('copy failed');
     }
     const btn = document.getElementById('copy-btn');
     btn.textContent = '✓ Скопировано!';
@@ -1349,39 +1424,52 @@ async function copyReport() {
   }
 }
 
+function resetResults() {
+  window._lastAnalysis = null;
+  const cont = document.getElementById('res-content');
+  cont.innerHTML = ''; cont.style.display = 'none';
+  document.getElementById('res-action-bar').style.display = 'none';
+  document.getElementById('res-empty').style.display = '';
+}
+
 function importJSON() {
   const raw = document.getElementById('import-json').value.trim();
   if(!raw) { alert('Вставьте JSON-данные в поле'); return; }
   let data;
   try { data = JSON.parse(raw); } catch(e) { alert('Неверный формат JSON: ' + e.message); return; }
-  const pt = data.patient || data;
+  const pt = (data && data.patient) || data;
+  if(!pt || typeof pt !== 'object' || Array.isArray(pt)) { alert('В JSON не найдены данные пациента'); return; }
   const fields = ['age','sex','af_type','af_dur','hr','sbp','dbp','ehra','egfr','ef','wt','cr','potassium','tsh','cur_oac','cur_rhythm','notes'];
-  // BUG2+5 FIX: prior_abl is boolean in export; potassium was missing
-  const priorAblEl = document.getElementById('prior_abl');
-  if(priorAblEl && pt.prior_abl != null) priorAblEl.value = pt.prior_abl ? 'yes' : 'no';
   const cbFields = ['c_hf','c_htn','c_dm','c_str','c_vas','co_hfref','co_hfpef','co_cad','co_acs','co_ms','co_vhd','co_mechvalve','co_hcm','co_wpw','co_osa','co_thyroid','co_obesity','co_preg','co_cancer','co_liver','co_ckd','co_esrd','co_athlete','h_htn','h_renal','h_liver','h_stroke','h_bleed','h_inr','h_age','h_drugs','h_alc'];
-  // BUG1 FIX: hemo_unstable is a <select> — restore separately
-  const hemEl = document.getElementById('hemo_unstable');
-  if(hemEl) hemEl.value = (pt.hemo_unstable === true) ? 'yes' : 'no';
   let loaded = 0;
+  // fields that are absent from the JSON are cleared, so nothing from the previous patient survives an import
   fields.forEach(f => {
     const el = document.getElementById(f);
-    if(el && pt[f]!=null) { el.value = pt[f]; loaded++; }
+    if(!el) return;
+    if(pt[f] != null) { el.value = pt[f]; loaded++; }
+    else if(el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
   });
+  const hemEl = document.getElementById('hemo_unstable');
+  if(hemEl) hemEl.value = (pt.hemo_unstable === true || pt.hemo_unstable === 'yes') ? 'yes' : 'no';
+  const priorAblEl = document.getElementById('prior_abl');
+  if(priorAblEl) priorAblEl.value = (pt.prior_abl === true || pt.prior_abl === 'yes') ? 'yes' : 'no';
   cbFields.forEach(f => {
     const el = document.getElementById(f);
     if(!el) return;
-    const val = f==='hemo_unstable' ? pt[f]===true : !!pt[f];
+    const val = !!pt[f];
     el.checked = val;
     const label = el.closest('.cb-item');
     if(label) label.classList.toggle('on', val);
     if(val) loaded++;
   });
+  resetResults();          // results on screen belonged to the previous patient
   updateScores();
   const st = document.getElementById('import-status');
-  st.textContent = `✓ Загружено полей: ${loaded}. Перейдите на вкладку «Пациент» и нажмите «Анализировать».`;
+  st.textContent = `✓ Загружено полей: ${loaded}. Проверьте данные на вкладке «Пациент» и нажмите «Анализировать».`;
   st.style.display = 'block';
   showView('form');
+  alert(`Загружено полей: ${loaded}. Проверьте данные и нажмите «Анализировать».`);
 }
 
 // PWA: установите через браузер (Safari → Поделиться → На экран «Домой» / Chrome → Добавить на гл. экран)
